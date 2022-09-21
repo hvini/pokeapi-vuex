@@ -13,10 +13,21 @@
       text-color="white"
       @click="$router.push({ name: 'Favorites' })"
     >
-      1
+      {{ qtyOfFavorites }}
       <v-icon right>
         mdi-heart
       </v-icon>
     </v-chip>
   </v-app-bar>
 </template>
+
+<script>
+  export default {
+    name: "AppBar",
+    computed: {
+      qtyOfFavorites() {
+        return this.$store.getters.qtyOfFavorites
+      }
+    }  
+  }
+</script>

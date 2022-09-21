@@ -16,7 +16,7 @@
       >
         <v-card-text class="d-flex flex-column">
           <div style="width: fit-content" @click="update(data.id)">
-            <v-chip v-if="fav"
+            <v-chip v-if="isFavorite(data.id)"
               color="#ffff"
               style="cursor: pointer"
             >
@@ -59,10 +59,11 @@
       fav: false
     }),
     methods: {
+      isFavorite(id) {
+        return this.$store.getters.isFavorite(id)
+      },
       update(id) {
-        this.fav = !this.fav
-
-        if (this.fav) {
+        if (!this.isFavorite(id)) {
           this.$emit('addFav', id)
           return
         }
