@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios"
 
 Vue.use(Vuex)
 
@@ -33,17 +32,21 @@ export default new Vuex.Store({
     async getPokemons({ commit }, payload) {
       const imageUrlofficial = "https://raw.githubusercontent.com/zekinah/zone-pokedex2/master/src/assets/images/pokemon/";
 
-      let res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=" + payload)
-      const pokemons = res.data.results.map(subdata => {
-        const id = subdata.url.split('/')[subdata.url.split('/').length - 2];
-        return {
-          id,
-          ...subdata,
-          imageUrl: `${imageUrlofficial}${id}.png`
-        };
-      });
-
-      commit("SET_POKEMONS", pokemons)
+      fetch("https://pokeapi.co/api/v2/pokemon?limit=" + payload)
+        .then((res) => {
+          return res.json()
+        })
+        .then((data) => {
+          const pokemons = data.results.map(subdata => {
+            const id = subdata.url.split("/")[subdata.url.split("/").length - 2]
+            return {
+              id,
+              ...subdata,
+              imageUrl: `${imageUrlofficial}${id}.png`
+            }
+          })
+          commit("SET_POKEMONS", pokemons)
+        })
     },
     addFavorite({ commit }, payload) {
       const fav = this.state.pokemons.find((x) => x.id === payload)
